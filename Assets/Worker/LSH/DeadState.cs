@@ -33,7 +33,9 @@ public class DeadState : MonoBehaviour, IState
     public void Dead()
     {
         Debug.Log("Dead 상태 (죽음)");
-        _unitController.gameObject.SetActive(false);
+        //못움직이고
+        //애니메이션 추가
+        //오브젝트 사라짐
     }
 
 

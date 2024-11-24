@@ -2,14 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.UI.CanvasScaler;
 
 
 public enum EOrder {Move, Attack };
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private EUnit _unitType;
-
     [SerializeField] private AStar _aStar;
 
     private List<UnitData> _units;
@@ -123,8 +120,7 @@ public class PlayerController : MonoBehaviour
         foreach(Collider2D hitCollider in coliders)
         {
             UnitData unit = hitCollider.GetComponent<UnitData>();
-            // 내 종족 Unit만 건들 수 있도록 함.
-            if(unit != null && unit.UnitType == _unitType)
+            if(unit != null)
             {
                 _units.Add(unit);
             }
@@ -140,13 +136,11 @@ public class PlayerController : MonoBehaviour
             _movePoint = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
 
             Collider2D target = Physics2D.OverlapCircle(_movePoint, 0.4f);
-
             // 공격할 대상이 있따면
             if (target != null)
             {
-                UnitData _unit = target.GetComponent<UnitData>();
-                // 장애물은 공격 대상으로 취급 안하고 Unit이어야 하며, 그 Unit은 아군종족이 아닌 다른 종족이어야함.
-                if (target.tag != "Obstacle" && _unit != null && _unit.UnitType != _unitType)
+                // 장애물은 공격 대상으로 취급 x.
+                if (target.tag != "Obstacle")
                 {
                     _target = target.gameObject;
                     CommandUnits(_target.transform.position.x, _target.transform.position.y, (int)EOrder.Attack);
